@@ -1,8 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+
 package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
@@ -10,6 +7,7 @@ import com.banco.domain.Banco;
 import com.banco.domain.ContaBancaria;
 import com.banco.domain.ContaCorrente;
 import com.banco.domain.ContaPoupanca;
+import com.banco.images.FundoTela;
 import com.banco.utils.Formatador;
 import javax.swing.JOptionPane;
 
@@ -32,7 +30,7 @@ public class CadastroConta extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroupConta = new javax.swing.ButtonGroup();
-        jPanelCadastro = new javax.swing.JPanel();
+        jPanelCadastro = new FundoTela(1);
         jRadioButtonContCorrente = new javax.swing.JRadioButton();
         jRadioButtonContPoupanca = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
@@ -51,9 +49,10 @@ public class CadastroConta extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Contas");
         setAlwaysOnTop(true);
+        setIconImage(JFrameAplicacao.getIcon());
         setResizable(false);
 
-        jPanelCadastro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro de Contas", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanelCadastro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro de Contas", 1, 0));
 
         buttonGroupConta.add(jRadioButtonContCorrente);
         jRadioButtonContCorrente.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -174,8 +173,8 @@ public class CadastroConta extends javax.swing.JFrame {
                                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel6))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(0, 10, Short.MAX_VALUE)))
+                        .addContainerGap(20, Short.MAX_VALUE))))
         );
         jPanelCadastroLayout.setVerticalGroup(
             jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,24 +207,18 @@ public class CadastroConta extends javax.swing.JFrame {
                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCadastrar)
                     .addComponent(jButtonFechar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanelCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanelCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();

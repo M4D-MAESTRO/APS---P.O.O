@@ -8,12 +8,23 @@ import com.banco.gui.CadastroConta;
 import com.banco.gui.MovimentarConta;
 import com.banco.gui.RelatorioConta;
 import com.banco.gui.RemoverConta;
+import com.banco.images.FundoTela;
+import com.banco.images.Images;
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 public class JFrameAplicacao extends javax.swing.JFrame {
     private final Float VERSION = (float) 1.0;
     private static Banco banco = new Banco();
+    private static Image icon = Images.getImage(3).getImage();
+    
+    public static Image getIcon(){
+        return icon;
+    }
 
     public static Banco getBanco() {
         return banco;
@@ -23,13 +34,16 @@ public class JFrameAplicacao extends javax.swing.JFrame {
     
     public JFrameAplicacao() {
         initComponents();
+        ImageIcon imagem = Images.getImageScaled(4, 600, 300);
+        jLabelImagem.setIcon(imagem);
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new FundoTela(1);
+        jLabelImagem = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuMenu = new javax.swing.JMenu();
         jMenuCriar = new javax.swing.JMenuItem();
@@ -41,17 +55,26 @@ public class JFrameAplicacao extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema bancário " + VERSION.toString());
+        setIconImage(icon);
         setResizable(false);
+
+        jLabelImagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/banco/images/Dinheiro(2).png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 656, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 656, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 437, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jMenuMenu.setText("Conta");
@@ -122,17 +145,11 @@ public class JFrameAplicacao extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -186,9 +203,14 @@ public class JFrameAplicacao extends javax.swing.JFrame {
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        
+        //<editor-fold defaultstate="collapsed" desc=" TEMA (DEFAULT COLOR - RED) ">
+         UIManager.put("nimbusBase", new Color(119,136,153));
+         UIManager.put("nimbusBlueGrey", new Color(0,139,139));
+         UIManager.put("control", new Color(0,191,255));
+        //</editor-fold>
+        
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -216,6 +238,7 @@ public class JFrameAplicacao extends javax.swing.JFrame {
     }
 //<editor-fold defaultstate="collapsed" desc="">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabelImagem;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCriar;
     private javax.swing.JMenu jMenuMenu;
