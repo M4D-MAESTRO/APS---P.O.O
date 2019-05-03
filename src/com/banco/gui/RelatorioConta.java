@@ -1,13 +1,15 @@
-
 package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
 import com.banco.domain.ContaBancaria;
+import com.banco.domain.ContaCorrente;
+import com.banco.domain.ContaPoupanca;
 import com.banco.domain.Imprimivel;
 import com.banco.domain.Relatorio;
 import com.banco.images.FundoTela;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,11 +18,11 @@ import javax.swing.DefaultComboBoxModel;
 public class RelatorioConta extends javax.swing.JFrame {
 
     private Boolean todas = true;
-    
+
     public RelatorioConta() {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -31,7 +33,7 @@ public class RelatorioConta extends javax.swing.JFrame {
         jRadioButtonSim = new javax.swing.JRadioButton();
         jRadioButtonNao = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
-        jComboBoxContas = new javax.swing.JComboBox<>();
+        jComboBoxContas = new javax.swing.JComboBox<String>();
         jButtonReport = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPaneReport = new javax.swing.JEditorPane();
@@ -42,7 +44,7 @@ public class RelatorioConta extends javax.swing.JFrame {
         setIconImage(JFrameAplicacao.getIcon());
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Relatório de Conta", 1, 0, new java.awt.Font("Times New Roman", 0, 14))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Relatório de Conta", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Times New Roman", 0, 14))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("Todas as contas?");
@@ -70,8 +72,14 @@ public class RelatorioConta extends javax.swing.JFrame {
         jLabel2.setText("Selecione uma conta");
 
         jComboBoxContas.setEnabled(false);
+        jComboBoxContas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxContasActionPerformed(evt);
+            }
+        });
 
         jButtonReport.setText("Visualizar Relatório");
+        jButtonReport.setEnabled(false);
         jButtonReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonReportActionPerformed(evt);
@@ -100,20 +108,20 @@ public class RelatorioConta extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonFechar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonReport, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jRadioButtonSim)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButtonNao)))
+                                .addComponent(jRadioButtonSim)
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBoxContas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(21, 179, Short.MAX_VALUE)))
+                                .addComponent(jRadioButtonNao)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxContas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 179, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonReport, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -128,9 +136,9 @@ public class RelatorioConta extends javax.swing.JFrame {
                     .addComponent(jRadioButtonSim)
                     .addComponent(jRadioButtonNao)
                     .addComponent(jComboBoxContas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonReport)
                 .addGap(18, 18, 18)
+                .addComponent(jButtonReport)
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonFechar)
@@ -157,7 +165,7 @@ public class RelatorioConta extends javax.swing.JFrame {
         jComboBoxContas.setModel(new DefaultComboBoxModel<>(lista));
         jComboBoxContas.setSelectedIndex(0);
         jComboBoxContas.setEnabled(false);
-        
+
         this.todas = true;
     }//GEN-LAST:event_jRadioButtonSimActionPerformed
 
@@ -169,14 +177,14 @@ public class RelatorioConta extends javax.swing.JFrame {
         String listaFinal[] = new String[lista.length + 1];
         listaFinal[0] = "Selecione uma conta";
         for (int i = 0; i < listaFinal.length; i++) {
-            if(i+1 < listaFinal.length){
-                listaFinal[i+1] = lista[i];
+            if (i + 1 < listaFinal.length) {
+                listaFinal[i + 1] = lista[i];
             }
-            
-        }        
+
+        }
         jComboBoxContas.setModel(new DefaultComboBoxModel<>(listaFinal));
         jComboBoxContas.setEnabled(true);
-        
+
         this.todas = false;
     }//GEN-LAST:event_jRadioButtonNaoActionPerformed
 
@@ -186,15 +194,42 @@ public class RelatorioConta extends javax.swing.JFrame {
 
     private void jButtonReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReportActionPerformed
         Relatorio report = new Relatorio();
-        
-        if(this.todas){
-            for (ContaBancaria conta : JFrameAplicacao.getBanco().getContas()){
+
+        if (this.todas) {
+            JFrameAplicacao.getBanco().getContas().stream().forEach((conta) -> {
                 report.gerarRelatorio((Imprimivel) conta);
+            });
+        } else {
+            ContaBancaria conta = null;
+            Long numeroConta = Long.valueOf(jComboBoxContas.getSelectedItem().toString());
+            Integer index = JFrameAplicacao.getBanco().getContas().indexOf(new ContaCorrente(numeroConta));
+            try {
+                if(index != -1){
+                    conta  = JFrameAplicacao.getBanco().getContas().get(index);
+                }else{
+                    conta  = JFrameAplicacao.getBanco().getContas().get(JFrameAplicacao.getBanco().getContas().indexOf(new ContaPoupanca(numeroConta)));
+                }                
+                
+                report.gerarRelatorio((Imprimivel) conta);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(null, "Selecione uma conta válida.", "ERRO", JOptionPane.PLAIN_MESSAGE);
+
             }
-        }else{
-            
+
         }
     }//GEN-LAST:event_jButtonReportActionPerformed
+
+    private void jComboBoxContasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxContasActionPerformed
+        if(jRadioButtonSim.isSelected()){
+            jButtonReport.setEnabled(true)
+        }
+        
+        if (jComboBoxContas.getSelectedIndex() != 0 && jRadioButtonSim.isSelected()){
+            jButtonReport.setEnabled(true);
+        } else {
+            jButtonReport.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBoxContasActionPerformed
 
     /**
      * @param args the command line arguments

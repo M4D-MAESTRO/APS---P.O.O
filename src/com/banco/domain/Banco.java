@@ -15,8 +15,13 @@ public class Banco {
     }
 
     public void inserir(ContaBancaria obj) {
-        contas.add(obj);
-        JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!", "SUCESSO", JOptionPane.PLAIN_MESSAGE);
+        if (contas.contains(obj)) {
+            JOptionPane.showMessageDialog(null, "Conta já cadastrada!", "ERRO", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            contas.add(obj);
+            JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!", "SUCESSO", JOptionPane.PLAIN_MESSAGE);
+
+        }
     }
 
     public void remover(Long numero) {
@@ -52,22 +57,22 @@ public class Banco {
     }
 
     /*public static void main(String a[]) {
-		Banco banco = new Banco();
-		banco.contas.addAll(Arrays.asList(
-				new ContaCorrente(Long.valueOf(1)), 
-				new ContaPoupanca(Long.valueOf(2)),
-				new ContaCorrente(Long.valueOf(3)), 
-				new ContaPoupanca(Long.valueOf(4)))
-				);
+     Banco banco = new Banco();
+     banco.contas.addAll(Arrays.asList(
+     new ContaCorrente(Long.valueOf(1)), 
+     new ContaPoupanca(Long.valueOf(2)),
+     new ContaCorrente(Long.valueOf(3)), 
+     new ContaPoupanca(Long.valueOf(4)))
+     );
 		
-		banco.procurarConta(Long.valueOf(3));
-		//banco.remover(Long.valueOf(2));
-		//banco.remover(Long.valueOf(3));
-		banco.remover(Long.valueOf(1000));
-		for(int i = 0; i < banco.contas.size(); i++) {
-			System.out.println(banco.contas.get(i).getNumeroConta());
-		}
-		System.out.println("Terminado");
+     banco.procurarConta(Long.valueOf(3));
+     //banco.remover(Long.valueOf(2));
+     //banco.remover(Long.valueOf(3));
+     banco.remover(Long.valueOf(1000));
+     for(int i = 0; i < banco.contas.size(); i++) {
+     System.out.println(banco.contas.get(i).getNumeroConta());
+     }
+     System.out.println("Terminado");
 
-	}*/
+     }*/
 }
