@@ -33,7 +33,7 @@ public class RelatorioConta extends javax.swing.JFrame {
         jRadioButtonSim = new javax.swing.JRadioButton();
         jRadioButtonNao = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
-        jComboBoxContas = new javax.swing.JComboBox<String>();
+        jComboBoxContas = new javax.swing.JComboBox<>();
         jButtonReport = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPaneReport = new javax.swing.JEditorPane();
@@ -79,7 +79,6 @@ public class RelatorioConta extends javax.swing.JFrame {
         });
 
         jButtonReport.setText("Visualizar Relatório");
-        jButtonReport.setEnabled(false);
         jButtonReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonReportActionPerformed(evt);
@@ -196,21 +195,22 @@ public class RelatorioConta extends javax.swing.JFrame {
         Relatorio report = new Relatorio();
 
         if (this.todas) {
-            JFrameAplicacao.getBanco().getContas().stream().forEach((conta) -> {
-                report.gerarRelatorio((Imprimivel) conta);
+            jEditorPaneReport.setText("");
+            JFrameAplicacao.getBanco().getContas().stream().forEach((conta) -> {                
+                jEditorPaneReport.setText(jEditorPaneReport.getText().concat(report.gerarRelatorio((Imprimivel) conta) + "\n ------------------------ \n")) ;
             });
         } else {
             ContaBancaria conta = null;
             Long numeroConta = Long.valueOf(jComboBoxContas.getSelectedItem().toString());
             Integer index = JFrameAplicacao.getBanco().getContas().indexOf(new ContaCorrente(numeroConta));
             try {
-                if(index != -1){
-                    conta  = JFrameAplicacao.getBanco().getContas().get(index);
-                }else{
-                    conta  = JFrameAplicacao.getBanco().getContas().get(JFrameAplicacao.getBanco().getContas().indexOf(new ContaPoupanca(numeroConta)));
-                }                
-                
-                report.gerarRelatorio((Imprimivel) conta);
+                if (index != -1) {
+                    conta = JFrameAplicacao.getBanco().getContas().get(index);
+                } else {
+                    conta = JFrameAplicacao.getBanco().getContas().get(JFrameAplicacao.getBanco().getContas().indexOf(new ContaPoupanca(numeroConta)));
+                }
+                jEditorPaneReport.setText("");
+                jEditorPaneReport.setText(report.gerarRelatorio((Imprimivel) conta));
             } catch (ArrayIndexOutOfBoundsException e) {
                 JOptionPane.showMessageDialog(null, "Selecione uma conta válida.", "ERRO", JOptionPane.PLAIN_MESSAGE);
 
@@ -220,15 +220,15 @@ public class RelatorioConta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonReportActionPerformed
 
     private void jComboBoxContasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxContasActionPerformed
-        if(jRadioButtonSim.isSelected()){
-            jButtonReport.setEnabled(true)
-        }
-        
-        if (jComboBoxContas.getSelectedIndex() != 0 && jRadioButtonSim.isSelected()){
+        if (jRadioButtonSim.isSelected()) {
+            jButtonReport.setEnabled(true);
+        } else if ((jComboBoxContas.getSelectedIndex() != 0) && (jRadioButtonNao.isSelected())) {
             jButtonReport.setEnabled(true);
         } else {
             jButtonReport.setEnabled(false);
         }
+
+
     }//GEN-LAST:event_jComboBoxContasActionPerformed
 
     /**

@@ -2,6 +2,6 @@ package com.banco.domain;
 
 public interface Imprimivel {
 
-	public void mostrarDados();
+	public String mostrarDados();
 	
 }

@@ -57,9 +57,9 @@ public class ContaCorrente extends ContaBancaria implements Imprimivel {
     }
 
     @Override
-    public void mostrarDados() {
-        JOptionPane.showMessageDialog(null, "Conta corrente número " + this.getNumeroConta() + "\nSaldo atual: " + this.getSaldo()
-                + "\nTaxa atual: " + this.taxaDeOperacao,"INFORMAÇÃO DA CONTA", JOptionPane.PLAIN_MESSAGE);
+    public String mostrarDados() {
+        return "Conta corrente número " + this.getNumeroConta() + "\nSaldo atual: " + this.getSaldo()
+                + "\nTaxa atual: " + this.taxaDeOperacao ;
 
     }
 

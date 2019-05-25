@@ -63,11 +63,9 @@ public class ContaPoupanca extends ContaBancaria implements Imprimivel {
 	}
 
 	@Override
-	public void mostrarDados() {
-		JOptionPane.showMessageDialog(null,
-						"Conta poupança número " + this.getNumeroConta() + "\nSaldo atual: " + this.getSaldo()
-								+ "\nLimite disponível: " + this.limite,
-						"INFORMAÇÃO DA CONTA", JOptionPane.PLAIN_MESSAGE);
+	public String mostrarDados() {
+		return "Conta poupança número " + this.getNumeroConta() + "\nSaldo atual: " + this.getSaldo()
+								+ "\nLimite disponível: " + this.limite;
 
 	}
 
