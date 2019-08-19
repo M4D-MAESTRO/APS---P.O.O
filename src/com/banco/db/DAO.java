@@ -8,6 +8,6 @@ public interface DAO<T> {
     public List<T> listarTodos();
     public void deletar(T obj);
     public void atualizar(T obj);
-    
+    public T getByNumeroConta(Long id);
     
 }

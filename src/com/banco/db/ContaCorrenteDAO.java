@@ -31,13 +31,14 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
 
     public static void main(String a[]) {
         ContaCorrenteDAO dao = new ContaCorrenteDAO();
-        /*ContaCorrente c = new ContaCorrente(null, 1000.00, 0.0);
-        dao.inserir(c);*/
+        ContaCorrente c = new ContaCorrente(null, 1000.00, 0.0);
+        dao.inserir(c);
+        
+        System.out.println(dao.getByNumeroConta((long)1));
 
         //dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
         //dao.deletar(new ContaCorrente(Long.parseLong("7")));
         //dao.atualizar(new ContaCorrente((long) 6, 800.0, 10.0));
-
     }
 
     @Override
@@ -105,6 +106,29 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
         } catch (SQLException ex) {
             Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public ContaCorrente getByNumeroConta(Long id) {
+        ContaCorrente cc = null;
+        Connection con = Conexao.getConexao();
+        String query = "SELECT contaBancaria.numeroConta, contaBancaria.saldo, contaCorrente.taxaDeOperacao from contaBancaria"
+                + " JOIN contaCorrente"
+                + " WHERE contaBancaria.numeroConta = contaCorrente.numeroConta AND contaCorrente.numeroConta = ?";
+
+        try {
+             PreparedStatement ps = con.prepareStatement(query);
+             ps.setLong(1, id);
+             
+             ResultSet rs = ps.executeQuery();
+             rs.first();
+             
+             cc = new ContaCorrente(rs.getLong("numeroConta"), rs.getDouble("saldo"), rs.getDouble("taxaDeOperacao"));
+             
+        } catch (SQLException ex) {
+            Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return cc;
     }
 
 }

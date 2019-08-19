@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.banco.db;
 
 import java.sql.*;
@@ -18,8 +13,6 @@ public class Conexao {
     private static final String PASSWORD = "root";
     private static Connection con = null;
 
-    
-    
     public static Connection getConexao() {
         try {
             Class.forName(DRIVER);
@@ -33,7 +26,7 @@ public class Conexao {
         return con;
     }
 
-    public static void closeConexao(){
+    public static void closeConexao() {
         try {
             con.close();
         } catch (SQLException ex) {
