@@ -1,0 +1,20 @@
+drop DATABASE banco;
+
+CREATE database banco;
+ use banco;
+ 
+  create TABLE contaBancaria ( 
+      numeroConta int PRIMARY key AUTO_INCREMENT not null, 
+      saldo double 
+  );
+ 
+  CREATE TABLE contaCorrente( 
+      taxaDeOperacao double, numeroConta int PRIMARY key, 
+      FOREIGN key (numeroConta) REFERENCES contaBancaria(numeroConta) 
+  );
+ 
+  CREATE TABLE contaPoupanca( 
+      limite double, numeroConta int PRIMARY key,
+  FOREIGN key (numeroConta) REFERENCES contaBancaria(numeroConta) 
+  );
+ 
