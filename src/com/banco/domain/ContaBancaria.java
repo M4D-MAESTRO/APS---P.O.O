@@ -73,6 +73,12 @@ public abstract class ContaBancaria {
 		return true;
 	}
 
+    @Override
+    public String toString() {
+        return "Conta bancária número: " + this.numeroConta + "\n"
+                + "Saldo: " + this.saldo;
+    }
+
 	
 	
 

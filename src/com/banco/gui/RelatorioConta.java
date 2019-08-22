@@ -1,6 +1,9 @@
 package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
+import com.banco.db.ContaCorrenteDAO;
+import com.banco.db.ContaPoupancaDAO;
+import com.banco.db.DAO;
 import com.banco.domain.ContaBancaria;
 import com.banco.domain.ContaCorrente;
 import com.banco.domain.ContaPoupanca;
@@ -8,6 +11,7 @@ import com.banco.domain.Imprimivel;
 import com.banco.domain.Relatorio;
 import com.banco.images.FundoTela;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -18,9 +22,16 @@ import javax.swing.JOptionPane;
 public class RelatorioConta extends javax.swing.JFrame {
 
     private Boolean todas = true;
+    private List<ContaBancaria> contas;
+    private DAO dao = new ContaCorrenteDAO();
+    private Boolean flag = true;
 
     public RelatorioConta() {
         initComponents();
+
+        contas = dao.listarTodos();
+        dao = new ContaPoupancaDAO();
+        contas.addAll(dao.listarTodos());
     }
 
     @SuppressWarnings("unchecked")
@@ -169,9 +180,9 @@ public class RelatorioConta extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonSimActionPerformed
 
     private void jRadioButtonNaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNaoActionPerformed
-        String lista[] = new String[JFrameAplicacao.getBanco().getContas().size()];
+        String lista[] = new String[contas.size()];
         for (int i = 0; i < lista.length; i++) {
-            lista[i] = String.valueOf(JFrameAplicacao.getBanco().getContas().get(i).getNumeroConta());
+            lista[i] = String.valueOf(contas.get(i).getNumeroConta());
         }
         String listaFinal[] = new String[lista.length + 1];
         listaFinal[0] = "Selecione uma conta";
@@ -195,20 +206,26 @@ public class RelatorioConta extends javax.swing.JFrame {
         Relatorio report = new Relatorio();
 
         if (this.todas) {
-            jEditorPaneReport.setText("");
-            JFrameAplicacao.getBanco().getContas().stream().forEach((conta) -> {                
-                jEditorPaneReport.setText(jEditorPaneReport.getText().concat(report.gerarRelatorio((Imprimivel) conta) + "\n ------------------------ \n")) ;
+            jEditorPaneReport.setText("Contas corrente: \n");
+            this.contas.stream().forEach(conta -> {
+                if ((conta instanceof ContaPoupanca) && flag) {
+                    jEditorPaneReport.setText(jEditorPaneReport.getText().concat("\nContas poupança: \n"));
+                    flag = false;
+                }
+                jEditorPaneReport.setText(jEditorPaneReport.getText().concat(report.gerarRelatorio((Imprimivel) conta) + "\n---------------------------------------------\n"));
             });
         } else {
             ContaBancaria conta = null;
-            Long numeroConta = Long.valueOf(jComboBoxContas.getSelectedItem().toString());
-            Integer index = JFrameAplicacao.getBanco().getContas().indexOf(new ContaCorrente(numeroConta));
+            Long id = Long.valueOf(jComboBoxContas.getSelectedItem().toString());
+            dao = new ContaCorrenteDAO();
+            conta = (ContaCorrente) dao.getByNumeroConta(id);
+            if (conta == null) {
+                dao = new ContaPoupancaDAO();
+                conta = (ContaPoupanca) dao.getByNumeroConta(id);
+            }
+            
             try {
-                if (index != -1) {
-                    conta = JFrameAplicacao.getBanco().getContas().get(index);
-                } else {
-                    conta = JFrameAplicacao.getBanco().getContas().get(JFrameAplicacao.getBanco().getContas().indexOf(new ContaPoupanca(numeroConta)));
-                }
+                
                 jEditorPaneReport.setText("");
                 jEditorPaneReport.setText(report.gerarRelatorio((Imprimivel) conta));
             } catch (ArrayIndexOutOfBoundsException e) {

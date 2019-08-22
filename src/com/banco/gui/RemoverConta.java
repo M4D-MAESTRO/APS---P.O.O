@@ -2,7 +2,11 @@ package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
 import com.banco.db.ContaCorrenteDAO;
+import com.banco.db.ContaPoupancaDAO;
+import com.banco.db.DAO;
+import com.banco.domain.ContaBancaria;
 import com.banco.domain.ContaCorrente;
+import com.banco.domain.ContaPoupanca;
 import com.banco.images.FundoTela;
 import com.banco.utils.Formatador;
 import javax.swing.JOptionPane;
@@ -12,11 +16,11 @@ import javax.swing.JOptionPane;
  * @author M4ESTRO
  */
 public class RemoverConta extends javax.swing.JFrame {
-    
+
     public RemoverConta() {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -124,16 +128,22 @@ public class RemoverConta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButtonRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverActionPerformed
-        
+
         Integer opcao = JOptionPane.showConfirmDialog(null, "Tem certeza?\nEsta operação NÃO PODERÁ SER DESFEITA!", "CERTEZA?", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-        
+
         if ((opcao == JOptionPane.CLOSED_OPTION) || (opcao == JOptionPane.NO_OPTION)) {
             return;
         } else {
             try {
-                JFrameAplicacao.getBanco().remover(Long.parseLong(jTextFieldNumConta.getText()));
-                ContaCorrenteDAO dao = new ContaCorrenteDAO();
-                dao.deletar(new ContaCorrente(Long.parseLong(jTextFieldNumConta.getText())));
+                Long id = Long.parseLong(jTextFieldNumConta.getText());
+                DAO dao = new ContaCorrenteDAO();
+                ContaBancaria conta = (ContaCorrente) dao.getByNumeroConta(id);
+                if (conta == null) {
+                    dao = new ContaPoupancaDAO();
+                    conta = (ContaPoupanca) dao.getByNumeroConta(id);
+                }
+               
+                dao.deletar(conta);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Por favor, prencha todos os campos!\nApenas NÚMEROS!", "ERRO", JOptionPane.PLAIN_MESSAGE);
             } catch (NullPointerException e) {
@@ -142,7 +152,7 @@ public class RemoverConta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro desconhecido!\nContate a T.I e informe o seguinte erro: " + e.toString(), "ERRO", JOptionPane.PLAIN_MESSAGE);
             }
         }
-        
+
 
     }//GEN-LAST:event_jButtonRemoverActionPerformed
 

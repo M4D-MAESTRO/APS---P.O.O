@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,26 +33,11 @@ public class ContaPoupancaDAO implements DAO<ContaPoupanca> {
             query = "INSERT INTO contaPoupanca VALUES(" + obj.getLimite() + ", " + rs.getInt(1) + ")";
             s = con.prepareStatement(query);
             s.execute(query);
+            JOptionPane.showMessageDialog(null,
+                    "Nova conta poupança número " + rs.getInt(1) + " cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(ContaPoupancaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public static void main(String a[]) {
-        ContaPoupancaDAO dao = new ContaPoupancaDAO();
-        ContaPoupanca cp = new ContaPoupanca((long) 5, 50000.0, 100000.0);
-        //dao.atualizar(cp);
-
-        cp = dao.getByNumeroConta((long) 2);
-        System.out.println(cp.mostrarDados());
-        /*
-        dao.inserir(cp);
-        dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
-
-        cp.setNumeroConta((long) 4);
-        dao.deletar(cp);
-        dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
-         */
     }
 
     @Override
@@ -88,6 +74,9 @@ public class ContaPoupancaDAO implements DAO<ContaPoupanca> {
 
             query = "DELETE FROM contaBancaria WHERE numeroConta = " + obj.getNumeroConta();
             s.execute(query);
+
+            JOptionPane.showMessageDialog(null,
+                    "Conta poupança número " + obj.getNumeroConta() + " deletada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(ContaPoupancaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -114,6 +103,9 @@ public class ContaPoupancaDAO implements DAO<ContaPoupanca> {
             ps.setLong(2, obj.getNumeroConta());
             ps.executeUpdate();
 
+            JOptionPane.showMessageDialog(null,
+                    "Conta poupança número " + obj.getNumeroConta() + " teve seus dados atualizados com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (SQLException ex) {
             Logger.getLogger(ContaPoupancaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,9 +123,10 @@ public class ContaPoupancaDAO implements DAO<ContaPoupanca> {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
-            rs.first();
-
-            cp = new ContaPoupanca(rs.getLong("numeroConta"), rs.getDouble("saldo"), rs.getDouble("limite"));
+            if (rs.next()) {
+                rs.first();
+                cp = new ContaPoupanca(rs.getLong("numeroConta"), rs.getDouble("saldo"), rs.getDouble("limite"));
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(ContaPoupancaDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,4 +135,21 @@ public class ContaPoupancaDAO implements DAO<ContaPoupanca> {
         return cp;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="TESTER">
+    /*public static void main(String a[]) {
+        ContaPoupancaDAO dao = new ContaPoupancaDAO();
+        ContaPoupanca cp = new ContaPoupanca((long) 5, 50000.0, 100000.0);
+        
+        dao.atualizar(cp);
+        cp = dao.getByNumeroConta((long) 2);
+        System.out.println(cp.mostrarDados());
+        dao.inserir(cp);
+        dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
+        cp.setNumeroConta((long) 4);
+        dao.deletar(cp);
+        dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
+         
+         dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
+    }*/
+    //</editor-fold>
 }

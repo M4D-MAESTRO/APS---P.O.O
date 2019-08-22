@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class ContaCorrenteDAO implements DAO<ContaCorrente> {
 
@@ -23,22 +24,12 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
             s = con.prepareStatement(query2);
             s.execute(query2);
 
+            JOptionPane.showMessageDialog(null,
+                    "Nova conta corrente número " + rs.getInt(1) + " cadastrada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    public static void main(String a[]) {
-        ContaCorrenteDAO dao = new ContaCorrenteDAO();
-        ContaCorrente c = new ContaCorrente(null, 1000.00, 0.0);
-        dao.inserir(c);
-        
-        System.out.println(dao.getByNumeroConta((long)1));
-
-        //dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
-        //dao.deletar(new ContaCorrente(Long.parseLong("7")));
-        //dao.atualizar(new ContaCorrente((long) 6, 800.0, 10.0));
     }
 
     @Override
@@ -77,6 +68,8 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
             query = "DELETE FROM contaBancaria WHERE numeroConta = " + obj.getNumeroConta();
             s = con.prepareStatement(query);
             s.execute(query);
+            JOptionPane.showMessageDialog(null,
+                    "Conta corrente número " + obj.getNumeroConta() + " deletada com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,6 +96,8 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
             ps.setLong(2, obj.getNumeroConta());
             ps.executeUpdate();
 
+            JOptionPane.showMessageDialog(null,
+                    "A conta corrente número " + obj.getNumeroConta() + " teve seus dados atualizados com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -117,18 +112,30 @@ public class ContaCorrenteDAO implements DAO<ContaCorrente> {
                 + " WHERE contaBancaria.numeroConta = contaCorrente.numeroConta AND contaCorrente.numeroConta = ?";
 
         try {
-             PreparedStatement ps = con.prepareStatement(query);
-             ps.setLong(1, id);
-             
-             ResultSet rs = ps.executeQuery();
-             rs.first();
-             
-             cc = new ContaCorrente(rs.getLong("numeroConta"), rs.getDouble("saldo"), rs.getDouble("taxaDeOperacao"));
-             
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setLong(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                rs.first();
+                cc = new ContaCorrente(rs.getLong("numeroConta"), rs.getDouble("saldo"), rs.getDouble("taxaDeOperacao"));
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(ContaCorrenteDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
         return cc;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="TESTER">
+    /*public static void main(String a[]) {
+        ContaCorrenteDAO dao = new ContaCorrenteDAO();
+        ContaCorrente c = new ContaCorrente(null, 100000.00, 1.0);
+        dao.inserir(c);
+        //System.out.println(dao.getByNumeroConta((long)1));
+        //dao.listarTodos().stream().forEach(conta -> System.out.println(conta.mostrarDados()));
+        //dao.deletar(new ContaCorrente(Long.parseLong("7")));
+        //dao.atualizar(new ContaCorrente((long) 6, 800.0, 10.0));
+    }*/
+    //</editor-fold>
 }

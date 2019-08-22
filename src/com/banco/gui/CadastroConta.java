@@ -1,9 +1,9 @@
-
-
 package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
 import com.banco.db.ContaCorrenteDAO;
+import com.banco.db.ContaPoupancaDAO;
+import com.banco.db.DAO;
 import com.banco.domain.Banco;
 import com.banco.domain.ContaBancaria;
 import com.banco.domain.ContaCorrente;
@@ -18,8 +18,10 @@ import javax.swing.JOptionPane;
  */
 public class CadastroConta extends javax.swing.JFrame {
 
-    private Boolean numero = false, saldo = false, taxaLim = false;
+    private Boolean saldo = false, taxaLim = false;
     private Boolean tipoConta = true;
+
+    private DAO dao;
 
     public CadastroConta() {
         initComponents();
@@ -34,8 +36,6 @@ public class CadastroConta extends javax.swing.JFrame {
         jPanelCadastro = new FundoTela(1);
         jRadioButtonContCorrente = new javax.swing.JRadioButton();
         jRadioButtonContPoupanca = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
-        jTextFieldNumConta = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldSaldo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -43,7 +43,6 @@ public class CadastroConta extends javax.swing.JFrame {
         jTextFieldTaxaLimite = new javax.swing.JTextField();
         jButtonCadastrar = new javax.swing.JButton();
         jButtonFechar = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -53,7 +52,7 @@ public class CadastroConta extends javax.swing.JFrame {
         setIconImage(JFrameAplicacao.getIcon());
         setResizable(false);
 
-        jPanelCadastro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro de Contas", 1, 0));
+        jPanelCadastro.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro de Contas", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         buttonGroupConta.add(jRadioButtonContCorrente);
         jRadioButtonContCorrente.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -71,19 +70,6 @@ public class CadastroConta extends javax.swing.JFrame {
         jRadioButtonContPoupanca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonContPoupancaActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel1.setText("Informe o número da Conta: ");
-
-        jTextFieldNumConta.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jTextFieldNumConta.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldNumContaKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldNumContaKeyTyped(evt);
             }
         });
 
@@ -132,8 +118,6 @@ public class CadastroConta extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("(insira apenas números)");
-
         jLabel5.setText("(insira apenas números)");
 
         jLabel6.setText("(insira apenas números)");
@@ -151,31 +135,23 @@ public class CadastroConta extends javax.swing.JFrame {
                     .addGroup(jPanelCadastroLayout.createSequentialGroup()
                         .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanelCadastroLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel4))
-                            .addComponent(jTextFieldNumConta, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelCadastroLayout.createSequentialGroup()
-                                .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanelCadastroLayout.createSequentialGroup()
-                                        .addComponent(jButtonFechar)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButtonCadastrar))
-                                    .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jTextFieldTaxaLimite, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelCadastroLayout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jTextFieldSaldo))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelCadastroLayout.createSequentialGroup()
-                                            .addComponent(jRadioButtonContCorrente)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jRadioButtonContPoupanca))
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(0, 10, Short.MAX_VALUE)))
-                        .addContainerGap(20, Short.MAX_VALUE))))
+                                .addComponent(jButtonFechar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonCadastrar))
+                            .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextFieldTaxaLimite, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelCadastroLayout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldSaldo))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelCadastroLayout.createSequentialGroup()
+                                    .addComponent(jRadioButtonContCorrente)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jRadioButtonContPoupanca))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addContainerGap(30, Short.MAX_VALUE))))
         );
         jPanelCadastroLayout.setVerticalGroup(
             jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,12 +160,6 @@ public class CadastroConta extends javax.swing.JFrame {
                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButtonContCorrente)
                     .addComponent(jRadioButtonContPoupanca))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -208,7 +178,7 @@ public class CadastroConta extends javax.swing.JFrame {
                 .addGroup(jPanelCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCadastrar)
                     .addComponent(jButtonFechar))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -219,7 +189,7 @@ public class CadastroConta extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -235,10 +205,6 @@ public class CadastroConta extends javax.swing.JFrame {
         tipoConta = false;
     }//GEN-LAST:event_jRadioButtonContPoupancaActionPerformed
 
-    private void jTextFieldNumContaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNumContaKeyTyped
-        Formatador.formatarCampoNumerico(evt);
-    }//GEN-LAST:event_jTextFieldNumContaKeyTyped
-
     private void jTextFieldSaldoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSaldoKeyTyped
         Formatador.formatarCampoNumerico(evt);
     }//GEN-LAST:event_jTextFieldSaldoKeyTyped
@@ -253,7 +219,7 @@ public class CadastroConta extends javax.swing.JFrame {
         } else {
             taxaLim = false;
         }
-        
+
         desbloquearCadastro();
     }//GEN-LAST:event_jTextFieldTaxaLimiteKeyReleased
 
@@ -263,19 +229,9 @@ public class CadastroConta extends javax.swing.JFrame {
         } else {
             saldo = false;
         }
-        
+
         desbloquearCadastro();
     }//GEN-LAST:event_jTextFieldSaldoKeyReleased
-
-    private void jTextFieldNumContaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNumContaKeyReleased
-        if (!jTextFieldNumConta.getText().isEmpty()) {
-            numero = true;
-        } else {
-            numero = false;
-        }
-
-        desbloquearCadastro();
-    }//GEN-LAST:event_jTextFieldNumContaKeyReleased
 
     private void jButtonFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFecharActionPerformed
         this.dispose();
@@ -284,15 +240,15 @@ public class CadastroConta extends javax.swing.JFrame {
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
         try {
             if (tipoConta) {
-                ContaCorrente conta = new ContaCorrente(Long.parseLong(jTextFieldNumConta.getText()), Double.parseDouble(jTextFieldSaldo.getText()), Double.parseDouble(jTextFieldTaxaLimite.getText()));
-                JFrameAplicacao.getBanco().inserir(conta);
-                ContaCorrenteDAO dao = new ContaCorrenteDAO();
+                ContaCorrente conta = new ContaCorrente(null, Double.parseDouble(jTextFieldSaldo.getText()), Double.parseDouble(jTextFieldTaxaLimite.getText()));
+                dao = new ContaCorrenteDAO();
                 dao.inserir(conta);
             } else {
-                ContaPoupanca conta = new ContaPoupanca(Long.parseLong(jTextFieldNumConta.getText()), Double.parseDouble(jTextFieldSaldo.getText()), Double.parseDouble(jTextFieldTaxaLimite.getText()));
+                ContaPoupanca conta = new ContaPoupanca(null, Double.parseDouble(jTextFieldSaldo.getText()), Double.parseDouble(jTextFieldTaxaLimite.getText()));
                 JFrameAplicacao.getBanco().inserir(conta);
+                dao = new ContaPoupancaDAO();
+                dao.inserir(conta);
             }
-            //JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!", "SUCESSO", JOptionPane.PLAIN_MESSAGE);
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, prencha todos os campos!\nApenas NÚMEROS!", "ERRO", JOptionPane.PLAIN_MESSAGE);
@@ -300,19 +256,14 @@ public class CadastroConta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro desconhecido!" + e.toString(), "ERRO", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
-
     private void desbloquearCadastro() {
-        if (numero && saldo && taxaLim) {
+        if (saldo && taxaLim) {
             jButtonCadastrar.setEnabled(true);
         } else {
             jButtonCadastrar.setEnabled(false);
         }
 
         String aux = "<html>";
-
-        if (!numero) {
-            aux += "Insira o número da conta";
-        }
 
         if (!saldo) {
             aux += "<br>Insira o saldo da conta";
@@ -327,9 +278,6 @@ public class CadastroConta extends javax.swing.JFrame {
         jButtonCadastrar.setToolTipText(aux);
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -366,17 +314,14 @@ public class CadastroConta extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroupConta;
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonFechar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelTaxaLim;
     private javax.swing.JPanel jPanelCadastro;
     private javax.swing.JRadioButton jRadioButtonContCorrente;
     private javax.swing.JRadioButton jRadioButtonContPoupanca;
-    private javax.swing.JTextField jTextFieldNumConta;
     private javax.swing.JTextField jTextFieldSaldo;
     private javax.swing.JTextField jTextFieldTaxaLimite;
     // End of variables declaration//GEN-END:variables

@@ -1,9 +1,12 @@
-
 package com.banco.gui;
 
 import com.banco.aplicacao.JFrameAplicacao;
+import com.banco.db.ContaCorrenteDAO;
+import com.banco.db.ContaPoupancaDAO;
+import com.banco.db.DAO;
 import com.banco.domain.ContaBancaria;
 import com.banco.domain.ContaCorrente;
+import com.banco.domain.ContaPoupanca;
 import com.banco.images.FundoTela;
 import com.banco.utils.Formatador;
 import javax.swing.JOptionPane;
@@ -16,6 +19,7 @@ public class MovimentarConta extends javax.swing.JFrame {
 
     private ContaBancaria conta;
     private Integer opcao = 1;
+    private DAO dao;
 
     public MovimentarConta() {
         initComponents();
@@ -41,14 +45,13 @@ public class MovimentarConta extends javax.swing.JFrame {
         jTextFieldNumContaTrans = new javax.swing.JTextField();
         jButtonConfirmar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Movimentar Contas");
         setIconImage(JFrameAplicacao.getIcon());
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Operações com Contas", 1, 0));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Operações com Contas", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("Informe o número da Conta: ");
@@ -147,55 +150,43 @@ public class MovimentarConta extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("TESTE");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextFieldNumContaTrans, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldValor))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jRadioButtonDepositar)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButtonSacar)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jRadioButtonTrans))
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(13, 13, 13))
-                            .addComponent(jTextFieldNumConta, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jButton2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButtonConfirmar))
-                                    .addComponent(jButtonLocalizar)
-                                    .addComponent(jLabel4))))
-                        .addGap(451, 451, 451))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextFieldNumContaTrans, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldValor))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jRadioButtonDepositar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonSacar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonTrans))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(13, 13, 13))
+                    .addComponent(jTextFieldNumConta, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonConfirmar))
+                            .addComponent(jButtonLocalizar)
+                            .addComponent(jLabel4))))
+                .addGap(451, 451, 451))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,9 +218,7 @@ public class MovimentarConta extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonConfirmar)
                     .addComponent(jButton2))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -240,7 +229,7 @@ public class MovimentarConta extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -262,7 +251,15 @@ public class MovimentarConta extends javax.swing.JFrame {
 
     private void jButtonLocalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLocalizarActionPerformed
         try {
-            this.conta = JFrameAplicacao.getBanco().procurarConta(Long.parseLong(jTextFieldNumConta.getText()));
+            Long id = Long.parseLong(jTextFieldNumConta.getText());
+            dao = new ContaCorrenteDAO();
+            this.conta = (ContaCorrente) dao.getByNumeroConta(id);
+            if (this.conta == null) {
+                dao = new ContaPoupancaDAO();
+                this.conta = (ContaPoupanca) dao.getByNumeroConta(id);
+            }
+
+            System.out.println(this.conta.toString());
             jTextFieldValor.setEnabled(true);
 
             System.out.println("Conta: " + conta.getNumeroConta());
@@ -275,10 +272,6 @@ public class MovimentarConta extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro desconhecido!\nContate a T.I e informe o seguinte erro: " + e.toString(), "ERRO", JOptionPane.PLAIN_MESSAGE);
             jTextFieldValor.setEnabled(false);
-        }
-
-        if (false) {
-            JOptionPane.showMessageDialog(null, "Conta localizada com sucesso!", "SUCESSO!", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jButtonLocalizarActionPerformed
 
@@ -332,21 +325,29 @@ public class MovimentarConta extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldNumContaTransKeyReleased
 
     private void jButtonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConfirmarActionPerformed
-        ContaBancaria contaTrans = null;
-
         switch (this.opcao) {
             case 1: //Deposito
                 this.conta.depositar(Double.parseDouble(jTextFieldValor.getText()));
+                dao.atualizar(this.conta);
                 break;
 
             case 2: //Saque
                 this.conta.sacar(Double.parseDouble(jTextFieldValor.getText()));
+                dao.atualizar(this.conta);
                 break;
 
             case 3: //Transferencia
                 Double valor = 0.0;
+                ContaBancaria contaTrans = null;
+                DAO daoTrans = null;
                 try {
-                    contaTrans = JFrameAplicacao.getBanco().procurarConta(Long.parseLong(jTextFieldNumContaTrans.getText()));
+                    Long id = Long.parseLong(jTextFieldNumContaTrans.getText());
+                    daoTrans = new ContaCorrenteDAO();
+                    contaTrans = (ContaCorrente) daoTrans.getByNumeroConta(id);
+                    if (contaTrans == null) {
+                        daoTrans = new ContaPoupancaDAO();
+                        contaTrans = (ContaPoupanca) daoTrans.getByNumeroConta(id);
+                    }
                     valor = Double.parseDouble(jTextFieldValor.getText());
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Por favor, prencha todos os campos!\nApenas NÚMEROS!", "ERRO", JOptionPane.PLAIN_MESSAGE);
@@ -358,7 +359,9 @@ public class MovimentarConta extends javax.swing.JFrame {
 
                 if (contaTrans != null) {
                     this.conta.transferir(valor, conta, contaTrans);
-                }else{
+                    dao.atualizar(this.conta);
+                    daoTrans.atualizar(contaTrans);
+                } else {
                     JOptionPane.showMessageDialog(null, "Conta inexistente", "ERRO", JOptionPane.PLAIN_MESSAGE);
                 }
 
@@ -367,17 +370,10 @@ public class MovimentarConta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonConfirmarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println("Conta: " + conta.getNumeroConta() + " - Saldo" + conta.getSaldo());
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -412,7 +408,6 @@ public class MovimentarConta extends javax.swing.JFrame {
 //<editor-fold defaultstate="collapsed" desc="">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupOpcao;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonConfirmar;
     private javax.swing.JButton jButtonLocalizar;
